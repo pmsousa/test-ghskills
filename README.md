@@ -4,12 +4,12 @@ A Vue.js SPA served from nginx, containerised, and hosted on Azure Container App
 
 ## Prerequisites
 
-| Tool | Version |
-|------|---------|
-| Node.js | 22+ |
-| Terraform | 1.9+ |
-| Azure CLI | latest |
-| Docker (local builds only) | — |
+| Tool                       | Version |
+| -------------------------- | ------- |
+| Node.js                    | 22+     |
+| Terraform                  | 1.9+    |
+| Azure CLI                  | latest  |
+| Docker (local builds only) | —       |
 
 ### Azure bootstrap
 
@@ -22,15 +22,15 @@ Before the first `terraform apply` you need:
 
 Go to **Settings → Secrets and variables → Actions** and add:
 
-| Kind | Name | Example value |
-|------|------|---------------|
-| Secret | `AZURE_CLIENT_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Secret | `AZURE_TENANT_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Secret | `AZURE_SUBSCRIPTION_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Variable | `ACR_NAME` | `crblogproductionwesteu` |
-| Variable | `ACR_LOGIN_SERVER` | `crblogproductionwesteu.azurecr.io` |
-| Variable | `CONTAINER_APP_NAME` | `ca-blog-production-westeu` |
-| Variable | `RESOURCE_GROUP` | `rg-blog-production-westeu` |
+| Kind     | Name                    | Example value                          |
+| -------- | ----------------------- | -------------------------------------- |
+| Secret   | `AZURE_CLIENT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| Secret   | `AZURE_TENANT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| Secret   | `AZURE_SUBSCRIPTION_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| Variable | `ACR_NAME`              | `crblogproductionwesteu`               |
+| Variable | `ACR_LOGIN_SERVER`      | `crblogproductionwesteu.azurecr.io`    |
+| Variable | `CONTAINER_APP_NAME`    | `ca-blog-production-westeu`            |
+| Variable | `RESOURCE_GROUP`        | `rg-blog-production-westeu`            |
 
 Also create a **GitHub Environment** named `production` with required reviewers or deployment branch rules as desired.
 
@@ -64,11 +64,11 @@ State is stored in Azure Blob Storage (`tfstate` container, key `blog/production
 
 ## CI/CD
 
-| Workflow | Trigger | Action |
-|----------|---------|--------|
-| `ci.yml` | PR to `main` | `npm ci` + build + docker build (no push) |
-| `cd.yml` | Push to `main` (non-infra paths) | `az acr build` → `az containerapp update` |
-| `terraform.yml` | PR/push to `main` on `infra/**` changes | plan on PR, apply on merge |
+| Workflow        | Trigger                                 | Action                                    |
+| --------------- | --------------------------------------- | ----------------------------------------- |
+| `ci.yml`        | PR to `main`                            | `npm ci` + build + docker build (no push) |
+| `cd.yml`        | Push to `main` (non-infra paths)        | `az acr build` → `az containerapp update` |
+| `terraform.yml` | PR/push to `main` on `infra/**` changes | plan on PR, apply on merge                |
 
 ## Contributing
 
