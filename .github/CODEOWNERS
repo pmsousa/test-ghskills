@@ -1,0 +1,6 @@
+# Global owners — all changes require review
+*                   @pmsousa
+
+# Infrastructure changes require additional review
+/infra/             @pmsousa
+/.github/           @pmsousa
