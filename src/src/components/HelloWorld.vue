@@ -1,10 +1,10 @@
 <script setup>
-import { ref } from 'vue'
-import viteLogo from '../assets/vite.svg'
-import heroImg from '../assets/hero.png'
-import vueLogo from '../assets/vue.svg'
+import { ref } from "vue";
+import viteLogo from "../assets/vite.svg";
+import heroImg from "../assets/hero.png";
+import vueLogo from "../assets/vue.svg";
 
-const count = ref(0)
+const count = ref(0);
 </script>
 
 <template>
@@ -40,7 +40,11 @@ const count = ref(0)
           </a>
         </li>
         <li>
-          <a href="https://vuejs.org/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://vuejs.org/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <img class="button-icon" :src="vueLogo" alt="" />
             Learn more
           </a>
@@ -55,7 +59,11 @@ const count = ref(0)
       <p>Join the Vite community</p>
       <ul>
         <li>
-          <a href="https://github.com/vitejs/vite" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://github.com/vitejs/vite"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg class="button-icon" role="presentation" aria-hidden="true">
               <use href="/icons.svg#github-icon"></use>
             </svg>
@@ -63,7 +71,11 @@ const count = ref(0)
           </a>
         </li>
         <li>
-          <a href="https://chat.vite.dev/" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://chat.vite.dev/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg class="button-icon" role="presentation" aria-hidden="true">
               <use href="/icons.svg#discord-icon"></use>
             </svg>
@@ -71,7 +83,11 @@ const count = ref(0)
           </a>
         </li>
         <li>
-          <a href="https://x.com/vite_js" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://x.com/vite_js"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg class="button-icon" role="presentation" aria-hidden="true">
               <use href="/icons.svg#x-icon"></use>
             </svg>
@@ -79,7 +95,11 @@ const count = ref(0)
           </a>
         </li>
         <li>
-          <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noopener noreferrer">
+          <a
+            href="https://bsky.app/profile/vite.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             <svg class="button-icon" role="presentation" aria-hidden="true">
               <use href="/icons.svg#bluesky-icon"></use>
             </svg>
