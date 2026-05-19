@@ -28,7 +28,14 @@ Go to **Settings → Secrets and variables → Actions** and add the three OIDC 
 | Secret | `AZURE_TENANT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
 | Secret | `AZURE_SUBSCRIPTION_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
 
-> **`ACR_NAME`, `ACR_LOGIN_SERVER`, `CONTAINER_APP_NAME`, and `RESOURCE_GROUP` are set automatically** by the `terraform.yml` workflow after each successful `terraform apply`. You do not need to create them manually.
+> After a successful `terraform apply`, set these four variables manually in **Settings → Secrets and variables → Actions → Variables**:
+>
+> | Kind     | Name                   | Where to get the value                     |
+> | -------- | ---------------------- | ------------------------------------------ |
+> | Variable | `ACR_NAME`             | `terraform output -raw acr_name`           |
+> | Variable | `ACR_LOGIN_SERVER`     | `terraform output -raw acr_login_server`   |
+> | Variable | `CONTAINER_APP_NAME`   | `terraform output -raw container_app_name` |
+> | Variable | `RESOURCE_GROUP`       | `terraform output -raw resource_group_name`|
 
 Also create a **GitHub Environment** named `production` with required reviewers or deployment branch rules as desired.
 

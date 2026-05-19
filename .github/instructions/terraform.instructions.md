@@ -2,7 +2,7 @@
 applyTo: "**/*.tf"
 ---
 
-- Use the module structure defined in `infra/modules/` before creating standalone resources
+- When adding reusable infrastructure, create child modules under `infra/modules/<module-name>/` rather than inlining everything in `main.tf`
 - All resources must include `tags = local.tags`
 - Naming convention: `<type>-<project>-<environment>-<location_short>` (e.g. `rg-blog-production-westeu`); ACR names replace hyphens with empty string
 - Check `infra/providers.tf` for the pinned `azurerm` version before generating resources — do not use attributes introduced in a later version

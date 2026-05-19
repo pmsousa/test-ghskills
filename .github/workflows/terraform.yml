@@ -17,15 +17,14 @@ env:
   TF_BACKEND_CONFIG: environments/production/backend.hcl
 
 jobs:
-  terraform:
+  plan:
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 30
-    environment: ${{ github.event_name == 'push' && 'production' || '' }}
     permissions:
       id-token: write
       contents: read
       pull-requests: write
-      variables: write
 
     steps:
       - uses: actions/checkout@v4
@@ -55,19 +54,21 @@ jobs:
       - name: Terraform Plan
         id: plan
         working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform plan -var-file=${{ env.TF_VAR_FILE }} -out=tfplan -no-color
-        continue-on-error: true
+        run: terraform plan -var-file=${{ env.TF_VAR_FILE }} -no-color
 
       - name: Post plan to PR
-        if: github.event_name == 'pull_request'
+        if: always()
         uses: actions/github-script@v7
+        env:
+          PLAN_STDOUT: ${{ steps.plan.outputs.stdout }}
+          PLAN_OUTCOME: ${{ steps.plan.outcome }}
         with:
           script: |
             const output = `#### Terraform Plan 📋
             \`\`\`
-            ${{ steps.plan.outputs.stdout }}
+            ${process.env.PLAN_STDOUT}
             \`\`\`
-            *Plan outcome: ${{ steps.plan.outcome }}*`;
+            *Plan outcome: ${process.env.PLAN_OUTCOME}*`;
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -75,26 +76,44 @@ jobs:
               body: output
             });
 
-      - name: Terraform Apply
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        working-directory: ${{ env.TF_WORKING_DIR }}
-        run: terraform apply -var-file=${{ env.TF_VAR_FILE }} -auto-approve -no-color
+  apply:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: production
+    permissions:
+      id-token: write
+      contents: read
 
-      - name: Export Terraform outputs as GitHub variables
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: '~1.9'
+
+      - name: Terraform Init
         working-directory: ${{ env.TF_WORKING_DIR }}
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh variable set ACR_NAME \
-            --repo ${{ github.repository }} \
-            --body "$(terraform output -raw acr_name)"
-          gh variable set ACR_LOGIN_SERVER \
-            --repo ${{ github.repository }} \
-            --body "$(terraform output -raw acr_login_server)"
-          gh variable set CONTAINER_APP_NAME \
-            --repo ${{ github.repository }} \
-            --body "$(terraform output -raw container_app_name)"
-          gh variable set RESOURCE_GROUP \
-            --repo ${{ github.repository }} \
-            --body "$(terraform output -raw resource_group_name)"
+        run: terraform init -backend-config=${{ env.TF_BACKEND_CONFIG }}
+
+      - name: Terraform Format Check
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform fmt -check -recursive
+
+      - name: Terraform Validate
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform validate
+
+      - name: Terraform Plan
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform plan -var-file=${{ env.TF_VAR_FILE }} -out=tfplan -no-color
+
+      - name: Terraform Apply
+        working-directory: ${{ env.TF_WORKING_DIR }}
+        run: terraform apply tfplan -no-color
