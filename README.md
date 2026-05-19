@@ -20,17 +20,15 @@ Before the first `terraform apply` you need:
 
 ### GitHub repository variables & secrets
 
-Go to **Settings → Secrets and variables → Actions** and add:
+Go to **Settings → Secrets and variables → Actions** and add the three OIDC secrets:
 
-| Kind     | Name                    | Example value                          |
-| -------- | ----------------------- | -------------------------------------- |
-| Secret   | `AZURE_CLIENT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Secret   | `AZURE_TENANT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Secret   | `AZURE_SUBSCRIPTION_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
-| Variable | `ACR_NAME`              | `crblogproductionwesteu`               |
-| Variable | `ACR_LOGIN_SERVER`      | `crblogproductionwesteu.azurecr.io`    |
-| Variable | `CONTAINER_APP_NAME`    | `ca-blog-production-westeu`            |
-| Variable | `RESOURCE_GROUP`        | `rg-blog-production-westeu`            |
+| Kind   | Name                    | Example value                          |
+| ------ | ----------------------- | -------------------------------------- |
+| Secret | `AZURE_CLIENT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| Secret | `AZURE_TENANT_ID`       | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| Secret | `AZURE_SUBSCRIPTION_ID` | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+
+> **`ACR_NAME`, `ACR_LOGIN_SERVER`, `CONTAINER_APP_NAME`, and `RESOURCE_GROUP` are set automatically** by the `terraform.yml` workflow after each successful `terraform apply`. You do not need to create them manually.
 
 Also create a **GitHub Environment** named `production` with required reviewers or deployment branch rules as desired.
 

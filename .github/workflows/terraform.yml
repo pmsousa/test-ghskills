@@ -25,6 +25,7 @@ jobs:
             id-token: write
             contents: read
             pull-requests: write
+            variables: write
 
         steps:
             - uses: actions/checkout@v4
@@ -78,3 +79,22 @@ jobs:
               if: github.event_name == 'push' && github.ref == 'refs/heads/main'
               working-directory: ${{ env.TF_WORKING_DIR }}
               run: terraform apply -var-file=${{ env.TF_VAR_FILE }} -auto-approve -no-color
+
+            - name: Export Terraform outputs as GitHub variables
+              if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+              working-directory: ${{ env.TF_WORKING_DIR }}
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  gh variable set ACR_NAME \
+                    --repo ${{ github.repository }} \
+                    --body "$(terraform output -raw acr_name)"
+                  gh variable set ACR_LOGIN_SERVER \
+                    --repo ${{ github.repository }} \
+                    --body "$(terraform output -raw acr_login_server)"
+                  gh variable set CONTAINER_APP_NAME \
+                    --repo ${{ github.repository }} \
+                    --body "$(terraform output -raw container_app_name)"
+                  gh variable set RESOURCE_GROUP \
+                    --repo ${{ github.repository }} \
+                    --body "$(terraform output -raw resource_group_name)"
