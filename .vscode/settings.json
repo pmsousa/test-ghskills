@@ -1,0 +1,15 @@
+{
+  "editor.formatOnSave": true,
+  "editor.rulers": [120],
+  "[terraform]": {
+    "editor.defaultFormatter": "hashicorp.terraform",
+    "editor.formatOnSave": true
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "files.associations": {
+    "*.tfvars": "terraform",
+    "*.hcl": "terraform"
+  }
+}
